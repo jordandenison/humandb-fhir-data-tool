@@ -3,11 +3,11 @@ const { each, reduce } = require('bluebird')
 const superagent = require('superagent')
 
 const fhirResources = {
-  stu2: require('../data/fhir-resources-stu2'),
-  stu3: require('../data/fhir-resources-stu3')
+  stu2: require('../../data/fhir-resources-stu2'),
+  stu3: require('../../data/fhir-resources-stu3')
 }
 
-const getFhirResourceJSON = async (datatype = 'stu2', fileTarget = '../data/exported-fhir-stu2-data.json') => {
+const getFhirResourceJSON = async (datatype = 'stu2', fileTarget = '../../data/exported-fhir-stu2-data.json') => {
   const data = await reduce(fhirResources[datatype], async (resourceCount, resource, i) => {
     console.log(`Fetching ${resource} data`)
     const url = datatype === 'stu2' ? 'http://stu2:4002/baseDstu2/' : 'http://stu3:4003/baseDstu3/'
