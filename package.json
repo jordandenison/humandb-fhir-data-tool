@@ -1,0 +1,24 @@
+{
+  "name": "humandb-fhir-data-tool",
+  "description": "Export FHIR data to JSON and import the JSON generated from this tool to a FHIR server",
+  "version": "0.0.1",
+  "homepage": "https://humandb.ai/",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "lint": "standard --fix",
+    "start": "node src/index.js",
+    "start-dev": "nodemon"
+  },
+  "dependencies": {
+    "app-module-path": "^2.2.0",
+    "bluebird": "^3.5.3",
+    "express": "^4.16.4",
+    "superagent": "^3.8.3",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1",
+    "standard": "^10.0.3"
+  }
+}
