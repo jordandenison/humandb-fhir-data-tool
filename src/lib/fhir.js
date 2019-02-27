@@ -8,16 +8,16 @@ const fhirResources = {
 }
 
 const getFhirResourceJSON = async (datatype = 'stu2', fileTarget = '../../data/exported-fhir-stu2-data.json') => {
-  const data = await reduce(fhirResources[datatype], async (resourceCount, resource, i) => {
+  const data = await reduce(fhirResources[datatype], async (resources, resource, i) => {
     console.log(`Fetching ${resource} data`)
     const url = datatype === 'stu2' ? 'http://stu2:4002/baseDstu2/' : 'http://stu3:4003/baseDstu3/'
     const result = await superagent.get(`${url}${resource}`)
 
     if (result.body.total) {
-      resourceCount[resource] = result.body.entry.map(entry => entry.resource)
+      resources[resource] = result.body.entry.map(entry => entry.resource)
     }
 
-    return resourceCount
+    return resources
   }, {})
 
   console.log(`Writing JSON to file`)
@@ -25,7 +25,7 @@ const getFhirResourceJSON = async (datatype = 'stu2', fileTarget = '../../data/e
   console.log(`Complete`)
 }
 
-const writeFhirResourceJSON = async (datatype = 'stu2', fileSource = '/resources/shared/fhir/sample/exported-fhir-stu2-data') => {
+const writeFhirResourceJSON = async (datatype = 'stu2', fileSource = '/resources/shared/fhir/sample/exported-fhir-stu2-data.json') => {
   const fhirDataFile = fs.readFileSync(fileSource)
   const fhirData = JSON.parse(fhirDataFile)
   const fhirResources = Object.keys(fhirData)
@@ -36,7 +36,7 @@ const writeFhirResourceJSON = async (datatype = 'stu2', fileSource = '/resources
   await each(fhirResources, async resource => {
     console.log(`Importing ${resource} data`)
     const resources = fhirData[resource]
-    
+
     return each(resources, async resourceData => superagent.put(`${url}${resource}/${resourceData.id}`).send(resourceData))
   })
 
